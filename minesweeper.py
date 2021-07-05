@@ -66,9 +66,14 @@ def goPlayer():
 		loopInput = False
 	return (x, y)
 
-def isFinish():
+def isFinish(PM, P):
 	'''определение текущего состояния игры:
 	выиграли, проиграли или игра продолжается'''
+	for i in range(N * N):
+		if P[i] !=-2 and PM[i] < 0: return -1 #наступил на мину
+	for i in range(N * N):
+		if P[i] == -2 and PM[i] >=0: return 1 #не все открыты. игра продолжается
+	return -2
 
 
 def startGame():
@@ -79,14 +84,22 @@ def startGame():
 	PM = [0] * N * N # поле с минами
 
 	createGame(PM)
-	show(PM)
-	goPlayer()
+	
+	finishState = isFinish(PM, P)
+	while finishState > 0:
+		show(P)
+		x, y = goPlayer()
+		P[x * N + y] = PM[x * N + y]
+		finishState = isFinish(PM, P)
+	show(P)
+	return finishState
+	
+		
 
-	while isFinish():
-		show()
-		goPlayer()
 
-
-
-startGame()
+result = startGame()
+if result < 0:
+	print('Вы проиграли')
+else:
+	print('Вы выиграли')
 print('Игра завершена')
