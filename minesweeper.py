@@ -1,7 +1,9 @@
 import random as r
 N, M = (5, 10) # размер игрового поля (N x N) и M мин на поле
 
-def getTotalMines():
+def getTotalMines(PM, i, j):
+	'''определение числа мин на соседних клетках для
+	кдетки на которой мины нет'''
 	n = 0
 	for k in range(-1, 2):
 		for l in range(-1, 2):
@@ -27,7 +29,7 @@ def createGame(PM):
 		j = rng.randrange(N)
 		if PM[i * N + j] != 0:
 			continue
-		P[i * N + j] = -1
+		PM[i * N + j] = -1
 		n -= 1
 	
 	# вычисляем количество мин вокруг клетки
@@ -37,9 +39,12 @@ def createGame(PM):
 				PM[i * N + j] = getTotalMines(PM, i, j)
 
 
-def show():
+def show(pole):
 	'''функция отображения игрового поля'''
-	pass
+	for i in range(N):
+		for j in range(N):
+			print ( str(pole[i * N + j]).rjust(3), end="")
+		print()
 
 def goPlayer():
 	'''Функция для ввода пользователем координат
@@ -55,9 +60,10 @@ def startGame():
 	игрок открывает закрытую клетку, выдается результат'''
 
 	P = [-2] * N * N # игровое поле
-	PM = [0] * N * N # поле мин
+	PM = [0] * N * N # поле с минами
 
 	createGame(PM)
+	show(PM)
 
 	while isFinish():
 		show()
