@@ -49,6 +49,22 @@ def show(pole):
 def goPlayer():
 	'''Функция для ввода пользователем координат
 	закрытой клетки игрового поля'''
+	loopInput = True
+	while loopInput:
+		x, y = input('Введите координату через пробел :').split()
+		if not x.isdigit() or not y.isdigit():
+			print('Координаты введены неверно. Введите от 1 до 5')
+			continue
+
+		x = int(x) - 1
+		y = int(y) - 1
+
+		if x < 0 or x >=N or y < 0 or y >=N:
+			print('Координаты выходят за пределы поля')
+			continue
+
+		loopInput = False
+	return (x, y)
 
 def isFinish():
 	'''определение текущего состояния игры:
@@ -64,6 +80,7 @@ def startGame():
 
 	createGame(PM)
 	show(PM)
+	goPlayer()
 
 	while isFinish():
 		show()
